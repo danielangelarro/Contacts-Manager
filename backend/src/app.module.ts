@@ -1,16 +1,15 @@
 import { Module } from '@nestjs/common';
-import { ContactController } from './api/controllers/contact.controller';
 import { ContactRepositoryImpl } from './infrastructure/repositories/contact.repository.impl';
 import { CreateContactUseCase } from './application/use-cases/create-contact.use-case';
 import { ListContactsUseCase } from './application/use-cases/list-contacts.use-case';
 import { UpdateContactUseCase } from './application/use-cases/update-contact.use-case';
-import { ContactRouter } from './api/contact/contact.router';
 import { DatabaseConfig } from './infrastructure/database/database.config';
+import { createTrpcContext } from './api/trpc/trpc.context'; 
+import { TrpcService } from './api/trpc/trpc.server';
 
 @Module({
-  controllers: [ContactController],
   providers: [
-    ContactRouter,
+    TrpcService,
     {
       provide: 'DatabaseConfig',
       useClass: DatabaseConfig,
@@ -36,6 +35,20 @@ import { DatabaseConfig } from './infrastructure/database/database.config';
       useFactory: (contactRepository: ContactRepositoryImpl) =>
         new UpdateContactUseCase(contactRepository),
       inject: ['ContactRepository'],
+    },
+    {
+      provide: 'TrpcContext',
+      useFactory: (
+        createContactUseCase: CreateContactUseCase,
+        listContactsUseCase: ListContactsUseCase,
+        updateContactUseCase: UpdateContactUseCase
+      ) =>
+        createTrpcContext({
+          createContactUseCase,
+          listContactsUseCase,
+          updateContactUseCase,
+        }),
+      inject: [CreateContactUseCase, ListContactsUseCase, UpdateContactUseCase],
     },
   ],
 })

@@ -1,63 +1,65 @@
 import { initTRPC } from "@trpc/server";
-import { CreateContactUseCase } from "src/application/use-cases/create-contact.use-case";
-import { ListContactsUseCase } from "src/application/use-cases/list-contacts.use-case";
-import { UpdateContactUseCase } from "src/application/use-cases/update-contact.use-case";
-import { ContactRepositoryImpl } from "src/infrastructure/repositories/contact.repository.impl";
-import { z } from "zod";
-import { ContactRouterMapper } from "./contact.router.dto";
 import { Injectable } from "@nestjs/common";
+import { z } from "zod";
+
+import { ContactRouterMapper } from "./contact.router.dto";
+import { router, publicProcedure } from "../trpc";
 
 
-@Injectable()
-export class ContactRouter {
-    constructor(
-        private readonly createContactUseCase: CreateContactUseCase,
-        private readonly listContactsUseCase: ListContactsUseCase,
-        private readonly updateContactUseCase: UpdateContactUseCase,
-    ) { }
+const mapper = new ContactRouterMapper();
 
-    t = initTRPC.create();
-    mapper = new ContactRouterMapper();
+export const contactRouter = router({
+    createContact: publicProcedure
+        .input(
+            z.object({
+                firstName: z.string(),
+                lastName: z.string(),
+                email: z.string().email(),
+                phone: z.string(),
+                company: z.string(),
+                position: z.string(),
+                status: z.enum(["New", "Contacted", "Qualified", "Lost"]),
+            })
+        )
+        .mutation(async ({ input, ctx }) => {
+            const contact = mapper.to_entitie(input);
 
-    _router = this.t.router({
-        createContact: this.t.procedure
-            .input(
-                z.object({
-                    firstName: z.string(),
-                    lastname: z.string(),
-                    email: z.string().email(),
-                    phone: z.string(),
-                    company: z.string(),
-                    position: z.string(),
-                    status: z.enum(["New", "Contacted", "Qualified", "Lost"]),
-                })
-            )
-            .mutation(async ({ input }) => {
-                const contact = this.mapper.to_entitie(input);
-                await this.createContactUseCase.execute(contact);
-            }),
+            const createContactUseCase = ctx.createContactUseCase;
+            const response = await createContactUseCase.execute(contact);
 
-        updateContact: this.t.procedure
-            .input(
-                z.object({
-                    id: z.number(),
-                    firstName: z.string(),
-                    lastname: z.string(),
-                    email: z.string().email(),
-                    phone: z.string(),
-                    company: z.string(),
-                    position: z.string(),
-                    status: z.enum(["New", "Contacted", "Qualified", "Lost"]),
-                })
-            )
-            .mutation(async ({ input }) => {
-                const contact = this.mapper.to_entitie(input);
-                contact.id = input.id;
+            return response;
+        }),
 
-                await this.updateContactUseCase.execute(contact);
-            }),
-        
-        listContactsUseCase: this.t.procedure
-            .query(async () => await this.listContactsUseCase.execute()),
-    });
-}
+    updateContact: publicProcedure
+        .input(
+            z.object({
+                id: z.number(),
+                firstName: z.string(),
+                lastName: z.string(),
+                email: z.string().email(),
+                phone: z.string(),
+                company: z.string(),
+                position: z.string(),
+                status: z.enum(["New", "Contacted", "Qualified", "Lost"]),
+            })
+        )
+        .mutation(async ({ input, ctx }) => {
+            const contact = mapper.to_entitie(input);
+            contact.id = input.id;
+
+            const updateContactUseCase = ctx.updateContactUseCase;
+            const response = await updateContactUseCase.execute(contact);
+
+            return response;
+        }),
+
+    listContacts: publicProcedure
+        .query(async ({ ctx }) => {
+            const listContactsUseCase = ctx.listContactsUseCase;
+            const response = await listContactsUseCase.execute();
+
+            return response;
+        }),
+});
+
+export type AppRouter = typeof contactRouter;

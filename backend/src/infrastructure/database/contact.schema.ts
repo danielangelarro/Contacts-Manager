@@ -11,5 +11,5 @@ export const contactsTable = mysqlTable("contacts", {
   position: varchar("position", { length: 255 }).notNull(),
   status: varchar("status", { length: 20, enum: ['New','Contacted','Qualified','Lost'] }).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").onUpdateNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().onUpdateNow().notNull(),
 });

@@ -13,16 +13,19 @@ export class ContactRepositoryImpl implements ContactRepository {
     constructor(@Inject('DatabaseConfig') private readonly databaseConfig: DatabaseConfig) { }
 
     async create(contact: Contact): Promise<Contact> {
-        (await this.databaseConfig.get_db())
-            .insert(contactsTable)
+        const db = await this.databaseConfig.get_db();
+
+        console.log(this.mapper.to_table(contact));
+
+        await db.insert(contactsTable)
             .values(this.mapper.to_table(contact));
 
         return contact;
     }
 
     async update(contact: Contact): Promise<Contact> {
-        (await this.databaseConfig.get_db())
-            .update(contactsTable)
+        const db = await this.databaseConfig.get_db();
+        await db.update(contactsTable)
             .set(this.mapper.to_entitie(contact))
             .where(eq(contactsTable.id, contact.id));
         
