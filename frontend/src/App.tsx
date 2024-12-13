@@ -1,7 +1,7 @@
 import { Flex, Container, Box, Heading, Section } from "@radix-ui/themes";
 import ContactTable from "./components/TableContact/TableContact";
 import ContactFilter, { Filter } from "./components/FilterContact/FilterPopover";
-import ContactDialog from "./components/CreateContact/CreateContact";
+import CreateContactDialog from "./components/CreateContact/CreateContact";
 import EditContactDialog from "./components/UpdateContact/EditContact";
 import { useListContacts } from "./hooks/useContacts";
 import { EditableContact } from "./entities/Contact";
@@ -10,16 +10,22 @@ import FilterList from "./components/FilterContact/FilterList";
 import Message from "./components/Message/Message";
 import LoadingPage from "./pages/LoadingPage";
 import ErrorPage from "./pages/ErrorPage";
+import ToastAlert from "./components/Alert/Alert";
 
 
 function App() {
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [message, setMessage] = useState<{ type: 'error' | 'success' | 'info'; text: string } | null>(null);
   const [filters, setFilters] = useState<Filter[]>([]);
   const [selectedContact, setSelectedContact] = useState<EditableContact | null>(null);
   const [isEditDialogOpen, setEditDialogOpen] = useState(false);
 
   const { data: contacts, isLoading, error } = useListContacts();
-  
+
+  const handleErrorClose = () => {
+    setErrorMessage(null);
+  };
+
   const handleFilterChange = (newFilters: Filter[]) => {
     setFilters(newFilters);
   };
@@ -39,24 +45,29 @@ function App() {
     setFilters(updatedFilters);
   };
 
-  if (isLoading) return <LoadingPage/>;
+  if (isLoading) return <LoadingPage />;
   if (error) return <ErrorPage />;
 
   return (
     <Container align="center" className="min-h-screen w-full" display="initial" p="4">
+      {errorMessage && (
+        <ToastAlert message={errorMessage} onClose={handleErrorClose} />
+      )}
+
       <Box className="navbar">
         <Heading size="1" className="app-name">
           My Contacts
         </Heading>
       </Box>
 
-      <Section/>
+      <Section />
 
       <Flex gap="3">
-        <ContactDialog />
+        <CreateContactDialog setErrorMessage={ setErrorMessage }/>
         <EditContactDialog
           contact={selectedContact}
           isOpen={isEditDialogOpen}
+          setErrorMessage={setErrorMessage}
           onClose={closeEditDialog}
         />
         <ContactFilter onFilterChange={handleFilterChange} />
@@ -69,13 +80,7 @@ function App() {
       <Box>
         {message && <Message type={message.type} message={message.text} />}
 
-        {isLoading ? (
-          <Message type="info" message="Loading contacts..." />
-        ) : error ? (
-          <Message type="error" message={`Error loading contacts: ${error}`} />
-        ) : (
-          <ContactTable contacts={contacts} filters={filters} onEdit={openEditDialog} />
-        )}
+        <ContactTable contacts={contacts} filters={filters} onEdit={openEditDialog} />
       </Box>
     </Container>
   );

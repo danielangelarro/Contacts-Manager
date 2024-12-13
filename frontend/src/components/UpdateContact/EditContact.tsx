@@ -11,10 +11,11 @@ import { ValidationErrors, validateContact } from "../../utils/validateContact";
 interface EditContactDialogProps {
     contact: EditableContact | null;
     isOpen: boolean;
+    setErrorMessage: (message: string) => void;
     onClose: () => void;
 }
 
-const EditContactDialog: React.FC<EditContactDialogProps> = ({ contact, isOpen, onClose }) => {
+const EditContactDialog: React.FC<EditContactDialogProps> = ({ contact, isOpen, setErrorMessage, onClose }) => {
     const [form, setForm] = useState<EditableContact>({
         id: 0,
         firstName: "",
@@ -51,7 +52,7 @@ const EditContactDialog: React.FC<EditContactDialogProps> = ({ contact, isOpen, 
 
             await updateContact.mutateAsync(form as EditableContact);
         } catch (err: any) {
-            setErrors(JSON.parse(err.message));
+            setErrorMessage(`Error creating contact: ${err.message}`);
         }
 
         onClose();
@@ -69,19 +70,6 @@ const EditContactDialog: React.FC<EditContactDialogProps> = ({ contact, isOpen, 
                     <Dialog.Description className="dialog-description">
                         Edit your contact details here. Click save when you're done.
                     </Dialog.Description>
-
-                    {errors && errors.map((e) => {
-                        return (
-                            <Callout.Root color="red">
-                                <Callout.Icon>
-                                    <InfoCircledIcon />
-                                </Callout.Icon>
-                                <Callout.Text>
-                                    {e.message}
-                                </Callout.Text>
-                            </Callout.Root>
-                        )
-                    })}
 
                     {["firstName", "lastName", "email", "phone", "company", "position"].map((field) =>
                         <div>
