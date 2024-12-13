@@ -66,7 +66,7 @@ const EditContactDialog: React.FC<EditContactDialogProps> = ({ contact, isOpen, 
             <Dialog.Portal>
                 <Dialog.Overlay className={styles.Overlay} />
                 <Dialog.Content className={styles.Content}>
-                    <Dialog.Title className="flex flex-col items-center text-xl font-bold text-white bg-blue-600 rounded-lg py-4 px-6 mb-4 shadow-md">
+                    <Dialog.Title className="flex flex-col items-center text-xl font-bold text-white bg-blue-500 rounded-lg py-4 px-6 mb-4 shadow-md">
                         <PersonIcon className="w-10 h-10 mb-2" />
                         Edit Contact
                     </Dialog.Title>
