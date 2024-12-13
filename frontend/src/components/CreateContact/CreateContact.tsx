@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import { Cross2Icon, InfoCircledIcon, PlusCircledIcon } from "@radix-ui/react-icons";
-import { Button, Callout, Select, Text, TextField } from "@radix-ui/themes";
+import { BackpackIcon, Cross2Icon, EnvelopeClosedIcon, IdCardIcon, InfoCircledIcon, MobileIcon, PersonIcon, PlusCircledIcon } from "@radix-ui/react-icons";
+import { Box, Button, Callout, Flex, Grid, Select, Text, TextField } from "@radix-ui/themes";
 import styles from "../../styles/modules/dialog.module.css";
 import { Contact } from "../../entities/Contact";
 import { useCreateContact } from "../../hooks/useContacts";
@@ -57,56 +57,76 @@ const CreateContact: React.FC<CreateContactProps> = ({ setErrorMessage }) => {
             <Dialog.Portal>
                 <Dialog.Overlay className={styles.Overlay} />
                 <Dialog.Content className={styles.Content}>
-                    <Dialog.Title className="dialog-title">Create Contact</Dialog.Title>
-                    <Dialog.Description className="dialog-description">
-                        Create your new contact here. Click save when you're done.
-                    </Dialog.Description>
+                    <Dialog.Title className="flex flex-col items-center text-xl font-bold text-white bg-blue-600 rounded-lg py-4 px-6 mb-4 shadow-md">
+                        <PersonIcon className="w-10 h-10 mb-2" />
+                        Create Contact
+                    </Dialog.Title>
 
-                    {errors && errors.map((e) => {
-                        return (
-                            <Callout.Root color="red">
-                                <Callout.Icon>
-                                    <InfoCircledIcon />
-                                </Callout.Icon>
-                                <Callout.Text>
-                                    {e.message}
-                                </Callout.Text>
-                            </Callout.Root>
-                        )
-                    })}
+                    {/* Form Errors */}
+                    {errors.map((e) => (
+                        <Callout.Root key={e.message} className="mb-4 flex items-center gap-3 bg-red-100 border border-red-500 text-red-700 p-4 rounded-lg">
+                            <Callout.Icon>
+                                <InfoCircledIcon className="w-5 h-5" />
+                            </Callout.Icon>
+                            <Callout.Text>{e.message}</Callout.Text>
+                        </Callout.Root>
+                    ))}
 
-                    {["firstName", "lastName", "email", "phone", "company", "position"].map((field) =>
-                        <div>
-                            <fieldset className={styles.Fieldset} key={"create-" + field}>
-                                <Text className={styles.Label} htmlFor={field}>
-                                    {field.charAt(0).toUpperCase() + field.slice(1)}
-                                </Text>
-                                <TextField.Root
-                                    className="input-field"
-                                    id={field}
-                                    name={field}
-                                    value={form[field as keyof typeof form]}
-                                    onChange={handleChange}
-                                    required={true}
-                                />
-                            </fieldset>
+                    {/* Form Fields - Two Column Layout */}
+                    <div className="grid grid-cols-2 md:grid-cols-2 gap-6">
+                        {[
+                            { field: "firstName", label: "First Name", placeholder: "Enter first name", icon: <PersonIcon /> },
+                            { field: "lastName", label: "Last Name", placeholder: "Enter last name", icon: <PersonIcon /> },
+                            { field: "email", label: "Email", placeholder: "Enter email address", icon: <EnvelopeClosedIcon /> },
+                            { field: "phone", label: "Phone", placeholder: "Enter phone number", icon: <MobileIcon /> },
+                            { field: "company", label: "Company", placeholder: "Enter company name", icon: <BackpackIcon /> },
+                            { field: "position", label: "Position", placeholder: "Enter position", icon: <IdCardIcon /> },
+                        ].map(({ field, label, placeholder, icon }) => (
+                            <div key={field} className="relative">
+                                <label htmlFor={field} className="block font-medium text-gray-700 mb-1">
+                                    {label}
+                                </label>
+                                <div className="flex items-center relative">
+                                    <div className="absolute left-3 text-gray-400">
+                                        {icon}
+                                    </div>
+                                    <input
+                                        id={field}
+                                        name={field}
+                                        value={form[field as keyof typeof form]}
+                                        onChange={handleChange}
+                                        placeholder={placeholder}
+                                        className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition"
+                                        required
+                                    />
+                                </div>
+                                {fieldErrors && Object.keys(fieldErrors).includes(field) && (
+                                    <Text className="text-sm text-red-600 mt-1">{eval(`fieldErrors.${field}`)}</Text>
+                                )}
 
-                            {fieldErrors && Object.keys(fieldErrors).includes(field) && (
-                                <Text className="error-message">{eval(`fieldErrors.${field}`)}</Text>
-                            )}
+                            </div>
+                        ))}
+                    </div>
 
-                        </div>
-                    )}
-
-                    <fieldset className={styles.Fieldset}>
-                        <Text className={styles.Label} htmlFor="status">
+                    {/* Status Dropdown */}
+                    < div className="mt-6" >
+                        <label htmlFor="status" className="block font-medium text-gray-700 mb-1">
                             Status
-                        </Text>
-                        <Select.Root name="status" size="3" value={form.status} onValueChange={(value) => setForm({ ...form, status: value as 'New' | 'Contacted' | 'Qualified' | 'Lost' })}>
-                            <Select.Trigger className="Select" placeholder="Select a status..." />
-                            <Select.Content className="SelectContent">
+                        </label>
+                        <Select.Root
+                            name="status"
+                            value={form.status}
+                            onValueChange={(value) =>
+                                setForm({ ...form, status: value as "New" | "Contacted" | "Qualified" | "Lost" })
+                            }
+                        >
+                            <Select.Trigger
+                                className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm text-left"
+                                placeholder="Select a status..."
+                            />
+                            <Select.Content>
                                 <Select.Group>
-                                    {['New', 'Contacted', 'Qualified', 'Lost'].map((status) => (
+                                    {["New", "Contacted", "Qualified", "Lost"].map((status) => (
                                         <Select.Item key={status} value={status}>
                                             {status}
                                         </Select.Item>
@@ -114,14 +134,24 @@ const CreateContact: React.FC<CreateContactProps> = ({ setErrorMessage }) => {
                                 </Select.Group>
                             </Select.Content>
                         </Select.Root>
-                    </fieldset>
-
-                    <div style={{ display: "flex", marginTop: 25, justifyContent: "flex-end" }}>
-                        <Button className="button" onClick={handleSubmit}>Save changes</Button>
                     </div>
+
+                    {/* Save Button */}
+                    <div className="flex justify-end mt-6">
+                        <Button
+                            className="bg-blue-600 text-white hover:bg-blue-700 px-6 py-2 rounded-lg transition-all"
+                            onClick={handleSubmit}
+                        >
+                            Save Changes
+                        </Button>
+                    </div>
+
                     <Dialog.Close asChild>
-                        <button className={styles.IconButton} aria-label="Close">
-                            <Cross2Icon />
+                        <button
+                            className="absolute top-4 right-4 hover:text-gray-600 bg-red-500 rounded-lg text-white"
+                            aria-label="Close"
+                        >
+                            <Cross2Icon className="w-5 h-5" />
                         </button>
                     </Dialog.Close>
                 </Dialog.Content>
