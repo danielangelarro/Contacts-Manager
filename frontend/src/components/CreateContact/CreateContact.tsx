@@ -9,7 +9,11 @@ import { TrcpValidationError } from "../../utils/trpc.client";
 import { validateContact, ValidationErrors } from "../../utils/validateContact";
 
 
-const DialogDemo: React.FC = () => {
+interface CreateContactProps {
+    setErrorMessage: (message: string) => void;
+}
+
+const CreateContact: React.FC<CreateContactProps> = ({ setErrorMessage }) => {
     const [form, setForm] = useState<Omit<Contact, 'createdAt' | 'updatedAt'>>({
         firstName: "",
         lastName: "",
@@ -39,7 +43,7 @@ const DialogDemo: React.FC = () => {
 
             await createContact.mutateAsync(form);
         } catch (err: any) {
-            setErrors(JSON.parse(err.message));
+            setErrorMessage(`Error editing contact: ${err.message}`);
         }
     };
 
@@ -126,4 +130,4 @@ const DialogDemo: React.FC = () => {
     );
 };
 
-export default DialogDemo;
+export default CreateContact;
