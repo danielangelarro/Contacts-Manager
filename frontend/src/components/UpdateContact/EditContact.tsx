@@ -11,11 +11,12 @@ import { ValidationErrors, validateContact } from "../../utils/validateContact";
 interface EditContactDialogProps {
     contact: EditableContact | null;
     isOpen: boolean;
+    setInfoMessage: (message: string) => void;
     setErrorMessage: (message: string) => void;
     onClose: () => void;
 }
 
-const EditContactDialog: React.FC<EditContactDialogProps> = ({ contact, isOpen, setErrorMessage, onClose }) => {
+const EditContactDialog: React.FC<EditContactDialogProps> = ({ contact, isOpen, setInfoMessage, setErrorMessage, onClose }) => {
     const [form, setForm] = useState<EditableContact>({
         id: 0,
         firstName: "",
@@ -51,6 +52,7 @@ const EditContactDialog: React.FC<EditContactDialogProps> = ({ contact, isOpen, 
             }
 
             await updateContact.mutateAsync(form as EditableContact);
+            setInfoMessage('User updated successfully');
         } catch (err: any) {
             setErrorMessage(`Error creating contact: ${err.message}`);
         }

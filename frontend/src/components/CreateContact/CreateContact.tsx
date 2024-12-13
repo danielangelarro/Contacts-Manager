@@ -10,10 +10,11 @@ import { validateContact, ValidationErrors } from "../../utils/validateContact";
 
 
 interface CreateContactProps {
+    setInfoMessage: (message: string) => void;
     setErrorMessage: (message: string) => void;
 }
 
-const CreateContact: React.FC<CreateContactProps> = ({ setErrorMessage }) => {
+const CreateContact: React.FC<CreateContactProps> = ({ setInfoMessage, setErrorMessage }) => {
     const [form, setForm] = useState<Omit<Contact, 'createdAt' | 'updatedAt'>>({
         firstName: "",
         lastName: "",
@@ -42,6 +43,17 @@ const CreateContact: React.FC<CreateContactProps> = ({ setErrorMessage }) => {
             }
 
             await createContact.mutateAsync(form);
+
+            setForm({
+                firstName: "",
+                lastName: "",
+                email: "",
+                phone: "",
+                company: "",
+                position: "",
+                status: "New",
+            })
+            setInfoMessage('User created successfully');
         } catch (err: any) {
             setErrorMessage(`Error editing contact: ${err.message}`);
         }
