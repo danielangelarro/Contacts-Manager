@@ -3,3 +3,64 @@
 
 @tailwind components;
 @tailwind utilities;
+
+body {
+    /* background: linear-gradient(135deg, rgba(255, 206, 35, 0.1), rgba(223, 57, 95, 0.1)); */
+    background-color: #fc5723;
+    font-family: 'Arial', sans-serif;
+    color: #111111;
+    margin: 0;
+    padding: 0;
+}
+
+.glass {
+    background: rgba(255, 255, 255, 0.8); /* Fondo translúcido blanco */
+    border-radius: 15px;
+    backdrop-filter: blur(15px); /* Efecto de desenfoque */
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    margin: 20px;
+}
+
+.button {
+    background-color: #fc5723; /* Color de acento */
+    color: #111111; /* Color de texto en botones */
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.button:hover {
+    background-color: #DF395F; /* Color de acento más oscuro al pasar el mouse */
+}
+
+.error {
+    color: #DF395F; /* Color de error */
+}
+
+.success {
+    color: #28A745; /* Color de éxito (puedes cambiarlo si lo deseas) */
+}
+
+.fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+}
+
+.transition-opacity {
+    transition: opacity 0.3s ease;
+}
+
+.transition-transform {
+    transition: transform 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    .fixed {
+        width: 75%;
+    }
+}

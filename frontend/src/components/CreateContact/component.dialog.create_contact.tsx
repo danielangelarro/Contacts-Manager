@@ -11,7 +11,7 @@ interface ContactDialogProps {
 }
 
 const DialogDemo: React.FC<ContactDialogProps> = ({ handleCreateContact }) => {
-    const [form, setForm] = useState<Contact>({
+    const [form, setForm] = useState<Omit<Contact, 'createdAt' | 'updatedAt'>>({
         firstName: "",
         lastName: "",
         email: "",
@@ -54,7 +54,7 @@ const DialogDemo: React.FC<ContactDialogProps> = ({ handleCreateContact }) => {
                                 className={styles.Input}
                                 id={field}
                                 name={field}
-                                value={form[field as keyof Contact]}
+                                value={form[field as keyof typeof form]}
                                 onChange={handleChange}
                                 required={true}
                             />
@@ -65,7 +65,7 @@ const DialogDemo: React.FC<ContactDialogProps> = ({ handleCreateContact }) => {
                         <Text className={styles.Label} htmlFor="status">
                             Status
                         </Text>
-                        <Select.Root name="status" value={form.status} onValueChange={(value) => setForm({ ...form, status: value })}>
+                        <Select.Root name="status" value={form.status} onValueChange={(value) => setForm({ ...form, status: value as 'New' | 'Contacted' | 'Qualified' | 'Lost' })}>
                             <Select.Trigger className={styles.Select} placeholder="Select a status..." />
                             <Select.Content>
                                 <Select.Group>

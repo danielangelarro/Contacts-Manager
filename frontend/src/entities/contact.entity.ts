@@ -1,3 +1,14 @@
+export interface EditableContact {
+    id: number;
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+    company: string;
+    position: string;
+    status: 'New' | 'Contacted' | 'Qualified' | 'Lost';
+}
+
 export class Contact {
     id?: number;
     firstName: string;
@@ -33,19 +44,4 @@ export class Contact {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
-
-    to_json = () => {
-        return {
-            // id: this.id,
-            firstName: this.firstName,
-            lastName: this.lastName,
-            email: this.email,
-            phone: this.phone,
-            company: this.company,
-            position: this.position,
-            status: this.status,
-            createdAt: this.createdAt,
-            updatedAt: this.updatedAt,
-        };
-    };
 }
