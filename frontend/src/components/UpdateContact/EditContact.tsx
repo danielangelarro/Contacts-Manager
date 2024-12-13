@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import { Cross2Icon, InfoCircledIcon } from "@radix-ui/react-icons";
-import { Button, Callout, Select, Text, TextField } from "@radix-ui/themes";
+import { BackpackIcon, Cross2Icon, EnvelopeClosedIcon, IdCardIcon, InfoCircledIcon, MobileIcon, PersonIcon } from "@radix-ui/react-icons";
+import { Blockquote, Button, Callout, Section, Select, Text, TextField } from "@radix-ui/themes";
 import styles from "../../styles/modules/dialog.module.css";
 import { EditableContact } from "../../entities/Contact";
 import { useUpdateContact } from "../../hooks/useContacts";
@@ -11,11 +11,12 @@ import { ValidationErrors, validateContact } from "../../utils/validateContact";
 interface EditContactDialogProps {
     contact: EditableContact | null;
     isOpen: boolean;
+    setInfoMessage: (message: string) => void;
     setErrorMessage: (message: string) => void;
     onClose: () => void;
 }
 
-const EditContactDialog: React.FC<EditContactDialogProps> = ({ contact, isOpen, setErrorMessage, onClose }) => {
+const EditContactDialog: React.FC<EditContactDialogProps> = ({ contact, isOpen, setInfoMessage, setErrorMessage, onClose }) => {
     const [form, setForm] = useState<EditableContact>({
         id: 0,
         firstName: "",
@@ -51,6 +52,7 @@ const EditContactDialog: React.FC<EditContactDialogProps> = ({ contact, isOpen, 
             }
 
             await updateContact.mutateAsync(form as EditableContact);
+            setInfoMessage('User updated successfully');
         } catch (err: any) {
             setErrorMessage(`Error creating contact: ${err.message}`);
         }
@@ -66,55 +68,101 @@ const EditContactDialog: React.FC<EditContactDialogProps> = ({ contact, isOpen, 
             <Dialog.Portal>
                 <Dialog.Overlay className={styles.Overlay} />
                 <Dialog.Content className={styles.Content}>
-                    <Dialog.Title className="dialog-title">Edit Contact</Dialog.Title>
-                    <Dialog.Description className="dialog-description">
-                        Edit your contact details here. Click save when you're done.
-                    </Dialog.Description>
+                    <Dialog.Title className="flex flex-col items-center text-xl font-bold text-white bg-blue-500 rounded-lg py-4 px-6 mb-4 shadow-md">
+                        <PersonIcon className="w-10 h-10 mb-2" />
+                        Edit Contact
+                    </Dialog.Title>
 
-                    {["firstName", "lastName", "email", "phone", "company", "position"].map((field) =>
-                        <div>
-                            <fieldset className={styles.Fieldset} key={"edit-" + field}>
-                                <Text className={styles.Label} htmlFor={field}>
-                                    {field.charAt(0).toUpperCase() + field.slice(1)}
-                                </Text>
-                                <TextField.Root
-                                    className="input-field"
-                                    id={field}
-                                    name={field}
-                                    value={form[field as keyof typeof form]}
-                                    onChange={handleChange}
-                                    required={true}
-                                />
-                            </fieldset>
+                    {/* Form Errors */}
+                    {errors.map((e) => (
+                        <Callout.Root key={e.message} className="mb-4 flex items-center gap-3 bg-red-100 border border-red-500 text-red-700 p-4 rounded-lg">
+                            <Callout.Icon>
+                                <InfoCircledIcon className="w-5 h-5" />
+                            </Callout.Icon>
+                            <Callout.Text>{e.message}</Callout.Text>
+                        </Callout.Root>
+                    ))}
 
-                            {fieldErrors && Object.keys(fieldErrors).includes(field) && (
-                                <Text className="error-message">{eval(`fieldErrors.${field}`)}</Text>
-                            )}
-                        </div>
-                    )}
+                    {/* Form Fields - Two Column Layout */}
+                    <div className="grid grid-cols-2 md:grid-cols-2 gap-6">
+                        {[
+                            { field: "firstName", label: "First Name", placeholder: "Enter first name", icon: <PersonIcon /> },
+                            { field: "lastName", label: "Last Name", placeholder: "Enter last name", icon: <PersonIcon /> },
+                            { field: "email", label: "Email", placeholder: "Enter email address", icon: <EnvelopeClosedIcon /> },
+                            { field: "phone", label: "Phone", placeholder: "Enter phone number", icon: <MobileIcon /> },
+                            { field: "company", label: "Company", placeholder: "Enter company name", icon: <BackpackIcon /> },
+                            { field: "position", label: "Position", placeholder: "Enter position", icon: <IdCardIcon /> },
+                        ].map(({ field, label, placeholder, icon }) => (
+                            <div key={field} className="relative">
+                                <label htmlFor={field} className="block font-medium text-gray-700 mb-1">
+                                    {label}
+                                </label>
+                                <div className="flex items-center relative">
+                                    <div className="absolute left-3 text-gray-400">
+                                        {icon}
+                                    </div>
+                                    <input
+                                        id={field}
+                                        name={field}
+                                        value={form[field as keyof typeof form]}
+                                        onChange={handleChange}
+                                        placeholder={placeholder}
+                                        className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition"
+                                        required
+                                    />
+                                </div>
+                                {fieldErrors && Object.keys(fieldErrors).includes(field) && (
+                                    <Text className="text-sm text-red-600 mt-1">{eval(`fieldErrors.${field}`)}</Text>
+                                )}
 
-                    <fieldset className={styles.Fieldset}>
-                        <Text className={styles.Label} htmlFor="status">
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Status Dropdown */}
+                    < div className="mt-6" >
+                        <label htmlFor="status" className="block font-medium text-gray-700 mb-1">
                             Status
-                        </Text>
-                        <Select.Root name="status" value={form.status} onValueChange={(value) => setForm({ ...form, status: value as 'New' | 'Contacted' | 'Qualified' | 'Lost' })}>
-                            <Select.Trigger className="Select" placeholder="Select a status..." />
-                            <Select.Content className="SelectContent">
+                        </label>
+                        <Select.Root
+                            name="status"
+                            value={form.status}
+                            onValueChange={(value) =>
+                                setForm({ ...form, status: value as "New" | "Contacted" | "Qualified" | "Lost" })
+                            }
+                        >
+                            <Select.Trigger
+                                className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm text-left"
+                                placeholder="Select a status..."
+                            />
+                            <Select.Content>
                                 <Select.Group>
-                                    {['New', 'Contacted', 'Qualified', 'Lost'].map((status) => (
-                                        <Select.Item key={status} value={status}>{status}</Select.Item>
+                                    {["New", "Contacted", "Qualified", "Lost"].map((status) => (
+                                        <Select.Item key={status} value={status}>
+                                            {status}
+                                        </Select.Item>
                                     ))}
                                 </Select.Group>
                             </Select.Content>
                         </Select.Root>
-                    </fieldset>
-
-                    <div style={{ display: "flex", marginTop: 25, justifyContent: "flex-end" }}>
-                        <Button className='button' onClick={handleSubmit}>Save changes</Button>
                     </div>
+
+                    {/* Save Button */}
+                    <div className="flex justify-end mt-6">
+                        <Button
+                            className="bg-blue-600 text-white hover:bg-blue-700 px-6 py-2 rounded-lg transition-all"
+                            onClick={handleSubmit}
+                        >
+                            Save Changes
+                        </Button>
+                    </div>
+
                     <Dialog.Close asChild>
-                        <button className={styles.IconButton} aria-label="Close">
-                            <Cross2Icon />
+                        <button
+                            className="absolute top-4 right-4 hover:text-gray-600 bg-red-500 rounded-lg text-white"
+                            aria-label="Close"
+                        >
+                            <Cross2Icon className="w-5 h-5" />
                         </button>
                     </Dialog.Close>
                 </Dialog.Content>

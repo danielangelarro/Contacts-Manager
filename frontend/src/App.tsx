@@ -11,10 +11,12 @@ import Message from "./components/Message/Message";
 import LoadingPage from "./pages/LoadingPage";
 import ErrorPage from "./pages/ErrorPage";
 import ToastAlert from "./components/Alert/Alert";
+import ToastInfo from "./components/Alert/Info";
 
 
 function App() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [infoMessage, setInfoMessage] = useState<string | null>(null);
   const [message, setMessage] = useState<{ type: 'error' | 'success' | 'info'; text: string } | null>(null);
   const [filters, setFilters] = useState<Filter[]>([]);
   const [selectedContact, setSelectedContact] = useState<EditableContact | null>(null);
@@ -24,6 +26,10 @@ function App() {
 
   const handleErrorClose = () => {
     setErrorMessage(null);
+  };
+
+  const handleInfoClose = () => {
+    setInfoMessage(null);
   };
 
   const handleFilterChange = (newFilters: Filter[]) => {
@@ -54,6 +60,10 @@ function App() {
         <ToastAlert message={errorMessage} onClose={handleErrorClose} />
       )}
 
+      {infoMessage && (
+        <ToastInfo message={infoMessage} onClose={handleInfoClose} />
+      )}
+
       <Box className="navbar">
         <Heading size="1" className="app-name">
           My Contacts
@@ -63,11 +73,12 @@ function App() {
       <Section />
 
       <Flex gap="3">
-        <CreateContactDialog setErrorMessage={ setErrorMessage }/>
+        <CreateContactDialog setErrorMessage={ setErrorMessage } setInfoMessage={ setInfoMessage } />
         <EditContactDialog
           contact={selectedContact}
           isOpen={isEditDialogOpen}
           setErrorMessage={setErrorMessage}
+          setInfoMessage={ setInfoMessage }
           onClose={closeEditDialog}
         />
         <ContactFilter onFilterChange={handleFilterChange} />
