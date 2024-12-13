@@ -1,35 +1,39 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Flex, Text, Card } from "@radix-ui/themes";
+import ContactTable from "./components/Table/contact.component.table";
+import ContactFilter from "./components/Popover/contact.filter";
+import ContactDialog from "./components/Dialog/component.dialog.create_contact";
+import { useCreateContact, useListContacts, useUpdateContact } from "./hooks/use.contacts";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const { data: contacts, isLoading, error } = useListContacts();
+  // const createContact = useCreateContact();
+  // const updateContact = useUpdateContact();
+
+  const handleRowClick = () => {
+    console.log("Row clicked");
+  };
+
+  if (isLoading) return <div>Loading Contacts...</div>;
+  if (error) return <div>Error al cargar contactos: {error.message}</div>;
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <Card 
+      className="min-h-screen items-center justify-center"
+    >
+      <Flex direction="column" align="center" gap="6" p="4" m="9">
+        <Text size="8" className="text-gray-800 font-semibold">
+          My Contacts
+        </Text>
+
+        <Flex direction="row" gap="4" justify="center">
+          <ContactFilter />
+          <ContactDialog />
+        </Flex>
+
+        <ContactTable contacts={contacts} onRowClick={handleRowClick} />
+      </Flex>
+    </Card>
+  );
 }
 
-export default App
+export default App;
