@@ -1,0 +1,194 @@
+@import "tailwindcss/base";
+@import "@radix-ui/themes/styles.css";
+
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --color-primary: #4A90E2; /* Azul suave */
+    --color-secondary: #50E3C2; /* Verde suave */
+    --color-tertiary: #F5A623; /* Amarillo suave */
+    --color-background: #F7F9FC; /* Fondo claro y suave */
+    --color-text: #333333; /* Texto oscuro */
+    --color-error: #D0021B; /* Rojo para errores */
+    --color-success: #7ED321; /* Verde para éxito */
+    --color-button-hover: #3B7BCE; /* Azul más oscuro para hover */
+    --color-button-active: #45BDA0; /* Verde más oscuro para hover */
+}
+
+body {
+    /* background-color: var(--color-background); */
+    background-image: url(../../public/arrangement-green-leaves-with-copy-space.jpg);
+    background-size: cover;
+    background-position: center; 
+    background-repeat: no-repeat;
+    font-family: 'Arial', sans-serif;
+    color: var(--color-text);
+    margin: 0;
+    padding: 0;
+}
+
+.navbar {
+    position: fixed; /* Fija la barra en la parte superior */
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px; /* Altura de la barra */
+    background: rgba(255, 255, 255, 0.2); /* Fondo blanco con opacidad */
+    backdrop-filter: blur(10px); /* Efecto de desenfoque */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3); /* Borde inferior */
+    display: flex; /* Usar flexbox para centrar el contenido */
+    align-items: center; /* Centrar verticalmente */
+    justify-content: center; /* Centrar horizontalmente */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    z-index: 1000; /* Asegurarse de que esté por encima de otros elementos */
+}
+
+.app-name {
+    font-size: 24px; /* Tamaño de fuente */
+    font-weight: bold; /* Negrita */
+    color: #333; /* Color del texto */
+    text-align: center; /* Centrar el texto */
+}
+
+.glass {
+    background: rgba(255, 255, 255, 0.8); /* Fondo blanco */
+    border-radius: 15px; /* Bordes redondeados */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: transform 0.2s;
+}
+
+.glass:hover {
+    transform: translateY(-5px);
+}
+
+.button {
+    background-color: var(--color-primary);
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    padding: 12px 24px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.button:hover {
+    background-color: var(--color-button-hover);
+    transform: scale(1.05);
+}
+
+.error {
+    color: var(--color-error);
+}
+
+.success {
+    color: var(--color-success);
+}
+
+.fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+}
+
+.transition-opacity {
+    transition: opacity 0.3s ease;
+}
+
+.transition-transform {
+    transition: transform 0.3s ease;
+}
+
+.dialog-content {
+    background: white; /* Fondo blanco */
+    display: flex; /* Flexible */
+    flex-direction: column; /* Flexible en columnas */
+    border-radius: 10px; /* Bordes redondeados */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    padding: 20px; /* Espaciado interno */
+    transition: transform 0.2s ease; /* Transición suave */
+    max-width: 90vw; /* Ancho máximo */
+    width: auto; /* Ancho automático */
+    height: auto; /* Altura automática */
+}
+
+.dialog-title {
+    font-size: 1.5rem; /* Tamaño de fuente más grande */
+    font-weight: bold; /* Negrita */
+    margin-bottom: 10px; /* Espaciado inferior */
+}
+
+.dialog-description {
+    font-size: 1rem; /* Tamaño de fuente normal */
+    color: #666; /* Color gris para el texto */
+    margin-bottom: 20px; /* Espaciado inferior */
+}
+
+.input-field {
+    border: 1px solid #ccc; /* Borde gris claro */
+    border-radius: 5px; /* Bordes redondeados */
+    padding: 10px; /* Espaciado interno */
+    width: 100%; /* Ancho completo */
+    transition: border-color 0.3s; /* Transición suave para el borde */
+}
+
+.input-field:focus {
+    border-color: #4A90E2; /* Color azul al enfocar */
+    outline: none; /* Sin contorno */
+}
+
+.error-message {
+    color: #D0021B; /* Color rojo para errores */
+    margin-top: -10px; /* Espaciado negativo para acercar al campo */
+    margin-bottom: 10px; /* Espaciado inferior */
+}
+
+.button-dialog {
+    background-color: #4A90E2; /* Color de fondo azul */
+    color: white; /* Color de texto blanco */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    padding: 12px 20px; /* Espaciado interno */
+    cursor: pointer; /* Cursor de mano */
+    font-weight: bold; /* Negrita */
+    transition: background-color 0.3s, transform 0.2s; /* Transiciones suaves */
+}
+
+.Select {
+    background-color: white; /* Color de fondo */
+    border: 1px solid #ccc; /* Borde gris claro */
+    border-radius: 4px; /* Bordes redondeados */
+    padding: 10px; /* Espaciado interno */
+    font-size: 15px; /* Tamaño de fuente */
+    color: #333; /* Color de texto */
+    cursor: pointer; /* Cursor de mano */
+    transition: border-color 0.3s;
+}
+
+.Select:focus {
+    border-color: #4A90E2; /* Color azul al enfocar */
+    outline: none; /* Sin contorno */
+}
+
+.SelectContent {
+    background-color: white; /* Color de fondo */
+    border-radius: 4px; /* Bordes redondeados */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
+}
+
+@media (max-width: 768px) {
+    .fixed {
+        width: 75%;
+    }
+}
+
+.hidden {
+    display: none;
+}
