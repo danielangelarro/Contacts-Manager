@@ -4,44 +4,62 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+    --color-primary: #4A90E2; /* Azul suave */
+    --color-secondary: #50E3C2; /* Verde suave */
+    --color-tertiary: #F5A623; /* Amarillo suave */
+    --color-background: #F7F9FC; /* Fondo claro y suave */
+    --color-text: #333333; /* Texto oscuro */
+    --color-error: #D0021B; /* Rojo para errores */
+    --color-success: #7ED321; /* Verde para éxito */
+    --color-button-hover: #3B7BCE; /* Azul más oscuro para hover */
+    --color-button-active: #45BDA0; /* Verde más oscuro para hover */
+}
+
 body {
-    /* background: linear-gradient(135deg, rgba(255, 206, 35, 0.1), rgba(223, 57, 95, 0.1)); */
-    background-color: #fc5723;
+    background-color: var(--color-background);
     font-family: 'Arial', sans-serif;
-    color: #111111;
+    color: var(--color-text);
     margin: 0;
     padding: 0;
 }
 
 .glass {
-    background: rgba(255, 255, 255, 0.8); /* Fondo translúcido blanco */
-    border-radius: 15px;
-    backdrop-filter: blur(15px); /* Efecto de desenfoque */
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+    background: #ffffff; /* Fondo blanco */
+    border-radius: 15px; /* Bordes redondeados */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    margin: 20px;
+    transition: transform 0.2s;
+}
+
+.glass:hover {
+    transform: translateY(-5px);
 }
 
 .button {
-    background-color: #fc5723; /* Color de acento */
-    color: #111111; /* Color de texto en botones */
+    background-color: var(--color-primary);
+    color: #ffffff;
     border: none;
     border-radius: 5px;
-    padding: 10px 20px;
+    padding: 12px 24px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    font-weight: bold;
+    font-size: 16px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s, transform 0.2s;
 }
 
 .button:hover {
-    background-color: #DF395F; /* Color de acento más oscuro al pasar el mouse */
+    background-color: var(--color-button-hover);
+    transform: scale(1.05);
 }
 
 .error {
-    color: #DF395F; /* Color de error */
+    color: var(--color-error);
 }
 
 .success {
-    color: #28A745; /* Color de éxito (puedes cambiarlo si lo deseas) */
+    color: var(--color-success);
 }
 
 .fixed {
@@ -63,4 +81,8 @@ body {
     .fixed {
         width: 75%;
     }
+}
+
+.hidden {
+    display: none;
 }

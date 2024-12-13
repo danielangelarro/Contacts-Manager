@@ -33,7 +33,7 @@ const DialogDemo: React.FC<ContactDialogProps> = ({ handleCreateContact }) => {
     return (
         <Dialog.Root>
             <Dialog.Trigger asChild>
-                <Button>
+                <Button className="button">
                     <PlusCircledIcon /> Create Contact
                 </Button>
             </Dialog.Trigger>
@@ -78,7 +78,7 @@ const DialogDemo: React.FC<ContactDialogProps> = ({ handleCreateContact }) => {
                     </fieldset>
 
                     <div style={{ display: "flex", marginTop: 25, justifyContent: "flex-end" }}>
-                        <Button className={`${styles.Button} green`} onClick={handleSubmit}>Save changes</Button>
+                        <Button className="button" onClick={handleSubmit}>Save changes</Button>
                     </div>
                     <Dialog.Close asChild>
                         <button className={styles.IconButton} aria-label="Close">

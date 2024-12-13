@@ -33,7 +33,7 @@ const ContactFilter: React.FC<{ onFilterChange: (filters: Filter[]) => void }> =
     return (
         <Popover.Root>
             <Popover.Trigger>
-                <Button>
+                <Button className='button'>
                     <MixerHorizontalIcon/> Filters
                 </Button>
             </Popover.Trigger>
@@ -67,7 +67,7 @@ const ContactFilter: React.FC<{ onFilterChange: (filters: Filter[]) => void }> =
                             placeholder="Filter value"
                             className="border p-2 rounded"
                         />
-                        <button onClick={addFilter} className="button">Add Filter</button>
+                        <Button onClick={addFilter} className="button">Add Filter</Button>
                     </div>
                     
                     <Popover.Close className="absolute top-2 right-2 text-gray-500 hover:text-gray-800">✖</Popover.Close>

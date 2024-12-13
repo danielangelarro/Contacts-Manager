@@ -54,7 +54,6 @@ export const ContactTable: React.FC<ContactTableProps> = ({ contacts, filters, o
   });
 
   return (
-    // <div className="overflow-x-auto">
     <Table.Root className="border-collapse glass">
       <Table.Header className="bg-gray-100">
         <Table.Row className="border-b">
@@ -89,7 +88,7 @@ export const ContactTable: React.FC<ContactTableProps> = ({ contacts, filters, o
             </Table.Cell>
 
             <Table.Cell className="text-blue-500 hover:underline" align='center'>
-              <Button onClick={() => onEdit(contact as EditableContact)}>
+              <Button className='button' onClick={() => onEdit(contact as EditableContact)}>
                 <Pencil2Icon /> Edit
               </Button>
             </Table.Cell>
@@ -98,7 +97,6 @@ export const ContactTable: React.FC<ContactTableProps> = ({ contacts, filters, o
         ))}
       </Table.Body>
     </Table.Root>
-    // </div>
   );
 };
 

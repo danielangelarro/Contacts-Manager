@@ -1,5 +1,6 @@
 import React from 'react';
 import FilterBadge from './filter.badge';
+import { Flex } from '@radix-ui/themes';
 
 interface Filter {
     field: string;
@@ -14,7 +15,7 @@ interface FilterListProps {
 
 const FilterList: React.FC<FilterListProps> = ({ filters, onRemoveFilter }) => {
     return (
-        <div className="flex flex-wrap mb-4">
+        <Flex className="flex flex-wrap mb-4">
             {filters.map((filter, index) => (
                 <FilterBadge
                     key={index}
@@ -24,7 +25,7 @@ const FilterList: React.FC<FilterListProps> = ({ filters, onRemoveFilter }) => {
                     onRemove={() => onRemoveFilter(index)}
                 />
             ))}
-        </div>
+        </Flex>
     );
 };
 

@@ -1,3 +1,5 @@
+import { Cross2Icon } from '@radix-ui/react-icons';
+import { Button, Flex } from '@radix-ui/themes';
 import React from 'react';
 
 interface FilterBadgeProps {
@@ -9,12 +11,12 @@ interface FilterBadgeProps {
 
 const FilterBadge: React.FC<FilterBadgeProps> = ({ field, operator, value, onRemove }) => {
     return (
-        <div className="flex items-center bg-blue-100 text-blue-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded">
+        <Flex mb="2" mt="2" align="center" className="bg-blue-100 text-blue-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded">
             <span>{`${field} ${operator} ${value}`}</span>
-            <button onClick={onRemove} className="ml-2 text-blue-600 hover:text-blue-800">
-                &times;
-            </button>
-        </div>
+            <Button onClick={onRemove} ml="2" className="button">
+                <Cross2Icon />
+            </Button>
+        </Flex>
     );
 };
 

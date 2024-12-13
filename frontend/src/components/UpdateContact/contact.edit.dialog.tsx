@@ -43,9 +43,7 @@ const EditContactDialog: React.FC<EditContactDialogProps> = ({ contact, handleUp
     return (
         <Dialog.Root open={isOpen} onOpenChange={onClose}>
             <Dialog.Trigger asChild>
-                <Button>
-                    <PlusCircledIcon /> Edit Contact
-                </Button>
+                <div className="hidden" />
             </Dialog.Trigger>
             <Dialog.Portal>
                 <Dialog.Overlay className={styles.Overlay} />
@@ -88,12 +86,12 @@ const EditContactDialog: React.FC<EditContactDialogProps> = ({ contact, handleUp
                     </fieldset>
 
                     <div style={{ display: "flex", marginTop: 25, justifyContent: "flex-end" }}>
-                        <Button className={`${styles.Button} green`} onClick={handleSubmit}>Save changes</Button>
+                        <Button className='button' onClick={handleSubmit}>Save changes</Button>
                     </div>
                     <Dialog.Close asChild>
-                        <button className={styles.IconButton} aria-label="Close">
+                        <Button className={styles.IconButton} aria-label="Close">
                             <Cross2Icon />
-                        </button>
+                        </Button>
                     </Dialog.Close>
                 </Dialog.Content>
             </Dialog.Portal>
