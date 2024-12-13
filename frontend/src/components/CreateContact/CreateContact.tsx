@@ -53,19 +53,19 @@ const DialogDemo: React.FC = () => {
             <Dialog.Portal>
                 <Dialog.Overlay className={styles.Overlay} />
                 <Dialog.Content className={styles.Content}>
-                    <Dialog.Title className={styles.Title}>Create Contact</Dialog.Title>
-                    <Dialog.Description className={styles.Description}>
+                    <Dialog.Title className="dialog-title">Create Contact</Dialog.Title>
+                    <Dialog.Description className="dialog-description">
                         Create your new contact here. Click save when you're done.
                     </Dialog.Description>
 
-                    {errors && errors.map((e) => { 
+                    {errors && errors.map((e) => {
                         return (
                             <Callout.Root color="red">
                                 <Callout.Icon>
                                     <InfoCircledIcon />
                                 </Callout.Icon>
                                 <Callout.Text>
-                                    { e.message }
+                                    {e.message}
                                 </Callout.Text>
                             </Callout.Root>
                         )
@@ -78,7 +78,7 @@ const DialogDemo: React.FC = () => {
                                     {field.charAt(0).toUpperCase() + field.slice(1)}
                                 </Text>
                                 <TextField.Root
-                                    className={styles.Input}
+                                    className="input-field"
                                     id={field}
                                     name={field}
                                     value={form[field as keyof typeof form]}
@@ -88,7 +88,7 @@ const DialogDemo: React.FC = () => {
                             </fieldset>
 
                             {fieldErrors && Object.keys(fieldErrors).includes(field) && (
-                                <Text color="red">{eval(`fieldErrors.${field}`)}</Text>
+                                <Text className="error-message">{eval(`fieldErrors.${field}`)}</Text>
                             )}
 
                         </div>
@@ -98,12 +98,14 @@ const DialogDemo: React.FC = () => {
                         <Text className={styles.Label} htmlFor="status">
                             Status
                         </Text>
-                        <Select.Root name="status" value={form.status} onValueChange={(value) => setForm({ ...form, status: value as 'New' | 'Contacted' | 'Qualified' | 'Lost' })}>
-                            <Select.Trigger className={styles.Select} placeholder="Select a status..." />
-                            <Select.Content>
+                        <Select.Root name="status" size="3" value={form.status} onValueChange={(value) => setForm({ ...form, status: value as 'New' | 'Contacted' | 'Qualified' | 'Lost' })}>
+                            <Select.Trigger className="Select" placeholder="Select a status..." />
+                            <Select.Content className="SelectContent">
                                 <Select.Group>
                                     {['New', 'Contacted', 'Qualified', 'Lost'].map((status) => (
-                                        <Select.Item key={status} value={status}>{status}</Select.Item>
+                                        <Select.Item key={status} value={status}>
+                                            {status}
+                                        </Select.Item>
                                     ))}
                                 </Select.Group>
                             </Select.Content>

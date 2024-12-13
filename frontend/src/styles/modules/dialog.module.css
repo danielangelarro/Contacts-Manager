@@ -7,7 +7,7 @@
 
 .Content {
 	background-color: white;
-	border-radius: 6px;
+	border-radius: 10px;
 	box-shadow:
 		hsl(206 22% 7% / 35%) 0px 10px 38px -10px,
 		hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
@@ -18,11 +18,12 @@
 	width: 90vw;
 	max-width: 450px;
 	max-height: 85vh;
-	padding: 25px;
-	animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+	padding: 20px;
+	transition: transform 0.2s ease;
+	/* animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
 	&:focus {
 		outline: none;
-	}
+	} */
 }
 
 .Title {
@@ -131,20 +132,25 @@
 }
 
 .Select {
-    background-color: red;
-    all: unset;
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	border-radius: 4px;
-	padding: 0 15px;
-	font-size: 15px;
-	line-height: 1;
-	font-weight: 500;
-	height: 35px;
-	&:focus {
-		box-shadow: 0 0 0 2px var(--gray-8);
-	}
+    background-color: white; /* Color de fondo */
+    border: 1px solid #ccc; /* Borde gris claro */
+    border-radius: 4px; /* Bordes redondeados */
+    padding: 10px; /* Espaciado interno */
+    font-size: 15px; /* Tamaño de fuente */
+    color: #333; /* Color de texto */
+    cursor: pointer; /* Cursor de mano */
+    transition: border-color 0.3s;
+}
+
+.Select:focus {
+    border-color: #4A90E2; /* Color azul al enfocar */
+    outline: none; /* Sin contorno */
+}
+
+.SelectContent {
+    background-color: white; /* Color de fondo */
+    border-radius: 4px; /* Bordes redondeados */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
 }
 
 @keyframes overlayShow {

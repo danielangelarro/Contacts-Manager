@@ -1,4 +1,4 @@
-import { Flex, Container, Box, Heading } from "@radix-ui/themes";
+import { Flex, Container, Box, Heading, Section } from "@radix-ui/themes";
 import ContactTable from "./components/TableContact/TableContact";
 import ContactFilter, { Filter } from "./components/FilterContact/FilterPopover";
 import ContactDialog from "./components/CreateContact/CreateContact";
@@ -8,6 +8,8 @@ import { EditableContact } from "./entities/Contact";
 import { useState } from "react";
 import FilterList from "./components/FilterContact/FilterList";
 import Message from "./components/Message/Message";
+import LoadingPage from "./pages/LoadingPage";
+import ErrorPage from "./pages/ErrorPage";
 
 
 function App() {
@@ -37,16 +39,18 @@ function App() {
     setFilters(updatedFilters);
   };
 
-  if (isLoading) return <div>Loading Contacts...</div>;
-  if (error) return <div>Error al cargar contactos: {error.message}</div>;
+  if (isLoading) return <LoadingPage/>;
+  if (error) return <ErrorPage />;
 
   return (
     <Container align="center" className="min-h-screen w-full" display="initial" p="4">
-      <Box>
-        <Heading size="1" className="text-center text-2xl md:text-3xl" mb="4">
+      <Box className="navbar">
+        <Heading size="1" className="app-name">
           My Contacts
         </Heading>
       </Box>
+
+      <Section/>
 
       <Flex gap="3">
         <ContactDialog />

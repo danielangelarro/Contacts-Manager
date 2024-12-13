@@ -65,8 +65,8 @@ const EditContactDialog: React.FC<EditContactDialogProps> = ({ contact, isOpen, 
             <Dialog.Portal>
                 <Dialog.Overlay className={styles.Overlay} />
                 <Dialog.Content className={styles.Content}>
-                    <Dialog.Title className={styles.Title}>Edit Contact</Dialog.Title>
-                    <Dialog.Description className={styles.Description}>
+                    <Dialog.Title className="dialog-title">Edit Contact</Dialog.Title>
+                    <Dialog.Description className="dialog-description">
                         Edit your contact details here. Click save when you're done.
                     </Dialog.Description>
 
@@ -90,7 +90,7 @@ const EditContactDialog: React.FC<EditContactDialogProps> = ({ contact, isOpen, 
                                     {field.charAt(0).toUpperCase() + field.slice(1)}
                                 </Text>
                                 <TextField.Root
-                                    className={styles.Input}
+                                    className="input-field"
                                     id={field}
                                     name={field}
                                     value={form[field as keyof typeof form]}
@@ -100,7 +100,7 @@ const EditContactDialog: React.FC<EditContactDialogProps> = ({ contact, isOpen, 
                             </fieldset>
 
                             {fieldErrors && Object.keys(fieldErrors).includes(field) && (
-                                <Text color="red">{eval(`fieldErrors.${field}`)}</Text>
+                                <Text className="error-message">{eval(`fieldErrors.${field}`)}</Text>
                             )}
                         </div>
                     )}
@@ -110,8 +110,8 @@ const EditContactDialog: React.FC<EditContactDialogProps> = ({ contact, isOpen, 
                             Status
                         </Text>
                         <Select.Root name="status" value={form.status} onValueChange={(value) => setForm({ ...form, status: value as 'New' | 'Contacted' | 'Qualified' | 'Lost' })}>
-                            <Select.Trigger className={styles.Select} placeholder="Select a status..." />
-                            <Select.Content>
+                            <Select.Trigger className="Select" placeholder="Select a status..." />
+                            <Select.Content className="SelectContent">
                                 <Select.Group>
                                     {['New', 'Contacted', 'Qualified', 'Lost'].map((status) => (
                                         <Select.Item key={status} value={status}>{status}</Select.Item>
@@ -125,9 +125,9 @@ const EditContactDialog: React.FC<EditContactDialogProps> = ({ contact, isOpen, 
                         <Button className='button' onClick={handleSubmit}>Save changes</Button>
                     </div>
                     <Dialog.Close asChild>
-                        <Button className={styles.IconButton} aria-label="Close">
+                        <button className={styles.IconButton} aria-label="Close">
                             <Cross2Icon />
-                        </Button>
+                        </button>
                     </Dialog.Close>
                 </Dialog.Content>
             </Dialog.Portal>
