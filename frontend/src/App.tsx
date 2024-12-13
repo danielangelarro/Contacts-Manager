@@ -1,13 +1,13 @@
-import { Flex, Text, Container, Box, Heading } from "@radix-ui/themes";
-import ContactTable from "./components/TableContact/contact.component.table";
-import ContactFilter, { Filter } from "./components/FilterContact/filter.popover";
-import ContactDialog from "./components/CreateContact/component.dialog.create_contact";
-import EditContactDialog from "./components/UpdateContact/contact.edit.dialog";
-import { useCreateContact, useListContacts, useUpdateContact } from "./hooks/use.contacts";
-import { Contact, EditableContact } from "./entities/contact.entity";
+import { Flex, Container, Box, Heading } from "@radix-ui/themes";
+import ContactTable from "./components/TableContact/TableContact";
+import ContactFilter, { Filter } from "./components/FilterContact/FilterPopover";
+import ContactDialog from "./components/CreateContact/CreateContact";
+import EditContactDialog from "./components/UpdateContact/EditContact";
+import { useListContacts } from "./hooks/useContacts";
+import { EditableContact } from "./entities/Contact";
 import { useState } from "react";
-import FilterList from "./components/FilterContact/filter.list";
-import Message from "./components/Message/message";
+import FilterList from "./components/FilterContact/FilterList";
+import Message from "./components/Message/Message";
 
 
 function App() {

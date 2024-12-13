@@ -1,6 +1,6 @@
 import { trpc } from '../utils/trpc.client';
-import { Contact } from '../entities/contact.entity';
-import { contactSchema } from '../schemas/contact.schemas';
+import { Contact } from '../entities/Contact';
+import { contactSchema } from '../schemas/contactSchemas';
 
 
 export const useListContacts = () => {

@@ -1,21 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import { Cross2Icon, PlusCircledIcon } from "@radix-ui/react-icons";
-import { Button, Select, Text, TextField } from "@radix-ui/themes";
+import { Cross2Icon, InfoCircledIcon, PlusCircledIcon } from "@radix-ui/react-icons";
+import { Button, Callout, Select, Text, TextField } from "@radix-ui/themes";
 import styles from "../../styles/modules/dialog.module.css";
-import { EditableContact } from "../../entities/contact.entity";
-import { useUpdateContact } from "../../hooks/use.contacts";
-import { ValidationError } from "../../utils/trpc.client";
+import { Contact } from "../../entities/Contact";
+import { useCreateContact } from "../../hooks/useContacts";
+import { TrcpValidationError } from "../../utils/trpc.client";
+import { validateContact, ValidationErrors } from "../../utils/validateContact";
 
-interface EditContactDialogProps {
-    contact: EditableContact | null;
-    isOpen: boolean;
-    onClose: () => void;
-}
 
-const EditContactDialog: React.FC<EditContactDialogProps> = ({ contact, isOpen, onClose }) => {
-    const [form, setForm] = useState<EditableContact>({
-        id: 0,
+const DialogDemo: React.FC = () => {
+    const [form, setForm] = useState<Omit<Contact, 'createdAt' | 'updatedAt'>>({
         firstName: "",
         lastName: "",
         email: "",
@@ -24,14 +19,9 @@ const EditContactDialog: React.FC<EditContactDialogProps> = ({ contact, isOpen, 
         position: "",
         status: "New",
     });
-    const [errors, setErrors] = useState<ValidationError[]>([]);
-    const updateContact = useUpdateContact();
-
-    useEffect(() => {
-        if (contact) {
-            setForm(contact);
-        }
-    }, [contact]);
+    const [errors, setErrors] = useState<TrcpValidationError[]>([]);
+    const [fieldErrors, setFieldErrors] = useState<ValidationErrors>({});
+    const createContact = useCreateContact();
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -40,30 +30,50 @@ const EditContactDialog: React.FC<EditContactDialogProps> = ({ contact, isOpen, 
 
     const handleSubmit = async () => {
         try {
-            await updateContact.mutateAsync(form as EditableContact);
+            const validationErrors: ValidationErrors = validateContact(form);
+            setFieldErrors(validationErrors);
+
+            if (Object.keys(validationErrors).length > 0) {
+                return;
+            }
+
+            await createContact.mutateAsync(form);
         } catch (err: any) {
             setErrors(JSON.parse(err.message));
         }
-
-        onClose();
     };
 
     return (
-        <Dialog.Root open={isOpen} onOpenChange={onClose}>
+        <Dialog.Root>
             <Dialog.Trigger asChild>
-                <div className="hidden" />
+                <Button className="button">
+                    <PlusCircledIcon /> Create Contact
+                </Button>
             </Dialog.Trigger>
             <Dialog.Portal>
                 <Dialog.Overlay className={styles.Overlay} />
                 <Dialog.Content className={styles.Content}>
-                    <Dialog.Title className={styles.Title}>Edit Contact</Dialog.Title>
+                    <Dialog.Title className={styles.Title}>Create Contact</Dialog.Title>
                     <Dialog.Description className={styles.Description}>
-                        Edit your contact details here. Click save when you're done.
+                        Create your new contact here. Click save when you're done.
                     </Dialog.Description>
+
+                    {errors && errors.map((e) => { 
+                        return (
+                            <Callout.Root color="red">
+                                <Callout.Icon>
+                                    <InfoCircledIcon />
+                                </Callout.Icon>
+                                <Callout.Text>
+                                    { e.message }
+                                </Callout.Text>
+                            </Callout.Root>
+                        )
+                    })}
 
                     {["firstName", "lastName", "email", "phone", "company", "position"].map((field) =>
                         <div>
-                            <fieldset className={styles.Fieldset} key={"edit-" + field}>
+                            <fieldset className={styles.Fieldset} key={"create-" + field}>
                                 <Text className={styles.Label} htmlFor={field}>
                                     {field.charAt(0).toUpperCase() + field.slice(1)}
                                 </Text>
@@ -77,15 +87,10 @@ const EditContactDialog: React.FC<EditContactDialogProps> = ({ contact, isOpen, 
                                 />
                             </fieldset>
 
-                            {errors && errors.map((e) => {
-                                if (field === e.path[0]) {
-                                    return (
-                                        <Text color="red">
-                                            {e.message}
-                                        </Text>
-                                    )
-                                }
-                            })}
+                            {fieldErrors && Object.keys(fieldErrors).includes(field) && (
+                                <Text color="red">{eval(`fieldErrors.${field}`)}</Text>
+                            )}
+
                         </div>
                     )}
 
@@ -106,12 +111,12 @@ const EditContactDialog: React.FC<EditContactDialogProps> = ({ contact, isOpen, 
                     </fieldset>
 
                     <div style={{ display: "flex", marginTop: 25, justifyContent: "flex-end" }}>
-                        <Button className='button' onClick={handleSubmit}>Save changes</Button>
+                        <Button className="button" onClick={handleSubmit}>Save changes</Button>
                     </div>
                     <Dialog.Close asChild>
-                        <Button className={styles.IconButton} aria-label="Close">
+                        <button className={styles.IconButton} aria-label="Close">
                             <Cross2Icon />
-                        </Button>
+                        </button>
                     </Dialog.Close>
                 </Dialog.Content>
             </Dialog.Portal>
@@ -119,4 +124,4 @@ const EditContactDialog: React.FC<EditContactDialogProps> = ({ contact, isOpen, 
     );
 };
 
-export default EditContactDialog;
+export default DialogDemo;

@@ -1,9 +1,9 @@
-import { createTRPCReact, TRPCClientError } from '@trpc/react-query';
+import { createTRPCReact } from '@trpc/react-query';
 import type { AppRouter } from '../../../backend/src/api/contact/contact.router';
 
 export const trpc = createTRPCReact<AppRouter>();
 
-export interface ValidationError {
+export interface TrcpValidationError {
     code: string;
     minimum?: number;
     type: string;
