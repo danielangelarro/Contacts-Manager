@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import * as Popover from '@radix-ui/react-popover';
-import { contactSchema } from '../../schemas/contact.schemas';
-import FilterList from './filter.list';
+import { contactSchema } from '../../schemas/contactSchemas';
 import { Button } from '@radix-ui/themes';
 import { MixerHorizontalIcon } from '@radix-ui/react-icons';
 

@@ -1,8 +1,8 @@
 import { Button, Table } from '@radix-ui/themes';
-import { Contact, EditableContact } from '../../entities/contact.entity';
+import { Contact, EditableContact } from '../../entities/Contact';
 import React from 'react';
 import { Pencil2Icon } from '@radix-ui/react-icons';
-import { Filter } from '../FilterContact/filter.popover';
+import { Filter } from '../FilterContact/FilterPopover';
 
 
 interface ContactTableProps {

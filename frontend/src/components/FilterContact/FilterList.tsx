@@ -1,5 +1,5 @@
 import React from 'react';
-import FilterBadge from './filter.badge';
+import FilterBadge from './FilterBadge';
 import { Flex } from '@radix-ui/themes';
 
 interface Filter {

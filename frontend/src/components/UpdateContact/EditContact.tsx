@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import { Cross2Icon, PlusCircledIcon } from "@radix-ui/react-icons";
+import { Cross2Icon } from "@radix-ui/react-icons";
 import { Button, Select, Text, TextField } from "@radix-ui/themes";
 import styles from "../../styles/modules/dialog.module.css";
-import { EditableContact } from "../../entities/contact.entity";
-import { useUpdateContact } from "../../hooks/use.contacts";
+import { EditableContact } from "../../entities/Contact";
+import { useUpdateContact } from "../../hooks/useContacts";
 import { ValidationError } from "../../utils/trpc.client";
 
 interface EditContactDialogProps {

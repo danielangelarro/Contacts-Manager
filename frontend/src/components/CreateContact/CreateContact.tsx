@@ -3,8 +3,8 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { Cross2Icon, PlusCircledIcon } from "@radix-ui/react-icons";
 import { Button, Select, Text, TextField } from "@radix-ui/themes";
 import styles from "../../styles/modules/dialog.module.css";
-import { Contact } from "../../entities/contact.entity";
-import { useCreateContact } from "../../hooks/use.contacts";
+import { Contact } from "../../entities/Contact";
+import { useCreateContact } from "../../hooks/useContacts";
 import { ValidationError } from "../../utils/trpc.client";
 
 
