@@ -3,15 +3,21 @@ import ContactTable from "./components/Table/contact.component.table";
 import ContactFilter from "./components/Popover/contact.filter";
 import ContactDialog from "./components/Dialog/component.dialog.create_contact";
 import { useCreateContact, useListContacts, useUpdateContact } from "./hooks/use.contacts";
+import { Contact } from "./entities/contact.entity";
 
 function App() {
   const { data: contacts, isLoading, error } = useListContacts();
-  // const createContact = useCreateContact();
-  // const updateContact = useUpdateContact();
+  const createContact = useCreateContact();
+  const updateContact = useUpdateContact();
 
   const handleRowClick = () => {
     console.log("Row clicked");
   };
+
+  const handleCreateContact = (contact: Contact) => {
+    const response = createContact.mutate(contact);
+    console.log(response);
+  }
 
   if (isLoading) return <div>Loading Contacts...</div>;
   if (error) return <div>Error al cargar contactos: {error.message}</div>;
@@ -27,7 +33,7 @@ function App() {
 
         <Flex direction="row" gap="4" justify="center">
           <ContactFilter />
-          <ContactDialog />
+          <ContactDialog handleCreateContact={handleCreateContact} />
         </Flex>
 
         <ContactTable contacts={contacts} onRowClick={handleRowClick} />

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import * as Popover from "@radix-ui/react-popover";
 import { MixerHorizontalIcon, Cross2Icon } from "@radix-ui/react-icons";
-import styles from "../../styles/popover.module.css";
+import styles from "../../styles/modules/popover.module.css";
 import { Button, Text, TextField } from "@radix-ui/themes";
 
 

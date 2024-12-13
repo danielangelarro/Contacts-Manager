@@ -9,10 +9,10 @@ export const useListContacts = () => {
 
 export const useCreateContact = () => {
     return trpc.createContact.useMutation({
-        onError: (error) => {
+        onError: (error: any) => {
             console.log(error);
         },
-        onSuccess: (data) => {
+        onSuccess: (data: Contact) => {
             console.log(data);
         },
     });
@@ -20,10 +20,10 @@ export const useCreateContact = () => {
 
 export const useUpdateContact = () => {
     return trpc.updateContact.useMutation({
-        onError: (error) => {
+        onError: (error: any) => {
             console.error("Error al actualizar contacto:", error);
         },
-        onSuccess: (data) => {
+        onSuccess: (data: Contact) => {
             console.log("Contacto actualizado:", data);
         },
     });

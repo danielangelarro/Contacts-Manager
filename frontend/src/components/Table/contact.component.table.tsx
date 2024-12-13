@@ -1,6 +1,7 @@
 import { Table } from '@radix-ui/themes';
 import { Contact } from '../../entities/contact.entity';
 import React from 'react';
+import { Pencil2Icon } from '@radix-ui/react-icons';
 
 
 interface ContactTableProps {
@@ -9,10 +10,7 @@ interface ContactTableProps {
 }
 
 
-export const ContactTable: React.FC<ContactTableProps> = ({
-  contacts,
-  onRowClick
-}) => {
+export const ContactTable: React.FC<ContactTableProps> = ({ contacts, onRowClick }) => {
   const columns = [
     { key: 'firstName', header: 'First Name' },
     { key: 'lastName', header: 'Last Name' },
@@ -20,7 +18,8 @@ export const ContactTable: React.FC<ContactTableProps> = ({
     { key: 'phone', header: 'Phone' },
     { key: 'company', header: 'Company' },
     { key: 'position', header: 'Position' },
-    { key: 'status', header: 'Status' }
+    { key: 'status', header: 'Status' },
+    { key: 'action', header: 'Action' },
   ];
 
   const statusColors = {
@@ -52,16 +51,66 @@ export const ContactTable: React.FC<ContactTableProps> = ({
             className="hover:bg-gray-50 border-b cursor-pointer"
             onClick={() => onRowClick && onRowClick(contact)}
           >
-            {columns.map((column) => (
-              <Table.Cell
-                key={column.key}
-                className="p-2"
-              >
-                <span className={`px-2 py-1 rounded-full text-xs ${statusColors[contact.status]}`}>
-                  {contact.status}
-                </span>
-              </Table.Cell>
-            ))}
+            <Table.Cell
+              key={`row-${contact.id}-firstName`}
+              className="p-2"
+            >
+              {contact.firstName}
+            </Table.Cell>
+
+            <Table.Cell
+              key={`row-${contact.id}-lastName`}
+              className="p-2"
+            >
+              {contact.lastName}
+            </Table.Cell>
+
+            <Table.Cell
+              key={`row-${contact.id}-email`}
+              className="p-2"
+            >
+              {contact.email}
+            </Table.Cell>
+
+            <Table.Cell
+              key={`row-${contact.id}-phone`}
+              className="p-2"
+            >
+              {contact.phone}
+            </Table.Cell>
+
+            <Table.Cell
+              key={`row-${contact.id}-company`}
+              className="p-2"
+            >
+              {contact.company}
+            </Table.Cell>
+
+            <Table.Cell
+              key={`row-${contact.id}-position`}
+              className="p-2"
+            >
+              {contact.position}
+            </Table.Cell>
+
+            <Table.Cell
+              key={`row-${contact.id}-status`}
+              className="p-2"
+              align='center'
+            >
+              <span className={`px-2 py-1 rounded-full text-xs ${statusColors[contact.status]}`}>
+                {contact.status}
+              </span>
+            </Table.Cell>
+            
+            <Table.Cell
+              key={`row-${contact.id}-position`}
+              className="p-2"
+              align='center'
+            >
+              <Pencil2Icon className="w-4 h-4 text-green-500" />
+            </Table.Cell>
+
           </Table.Row>
         ))}
       </Table.Body>

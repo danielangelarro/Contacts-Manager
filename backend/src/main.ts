@@ -7,6 +7,7 @@ async function bootstrap() {
     const app = await NestFactory.create(AppModule);  
     const trpcService = app.get(TrpcService);
 
+    app.enableCors()
     app.use('/trpc', trpcService.getHttpHandler());
     
     await app.listen(3000);
