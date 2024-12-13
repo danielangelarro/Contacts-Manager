@@ -27,6 +27,15 @@ export class ContactRepositoryMapper {
     }
 
     public to_entities(contacts: any[]) {
-        return contacts.map((contact: any) => this.to_entitie(contact));
+        return contacts.map((contact: any) => new Contact(
+            contact.firstName,
+            contact.lastName,
+            contact.email,
+            contact.phone,
+            contact.company,
+            contact.position,
+            contact.status,
+            contact.id,
+        ));
     }
 }
