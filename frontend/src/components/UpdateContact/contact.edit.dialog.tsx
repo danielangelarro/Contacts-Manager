@@ -4,15 +4,16 @@ import { Cross2Icon, PlusCircledIcon } from "@radix-ui/react-icons";
 import { Button, Select, Text, TextField } from "@radix-ui/themes";
 import styles from "../../styles/modules/dialog.module.css";
 import { EditableContact } from "../../entities/contact.entity";
+import { useUpdateContact } from "../../hooks/use.contacts";
+import { ValidationError } from "../../utils/trpc.client";
 
 interface EditContactDialogProps {
     contact: EditableContact | null;
-    handleUpdateContact: (contact: EditableContact) => void;
     isOpen: boolean;
     onClose: () => void;
 }
 
-const EditContactDialog: React.FC<EditContactDialogProps> = ({ contact, handleUpdateContact, isOpen, onClose }) => {
+const EditContactDialog: React.FC<EditContactDialogProps> = ({ contact, isOpen, onClose }) => {
     const [form, setForm] = useState<EditableContact>({
         id: 0,
         firstName: "",
@@ -23,6 +24,8 @@ const EditContactDialog: React.FC<EditContactDialogProps> = ({ contact, handleUp
         position: "",
         status: "New",
     });
+    const [errors, setErrors] = useState<ValidationError[]>([]);
+    const updateContact = useUpdateContact();
 
     useEffect(() => {
         if (contact) {
@@ -35,8 +38,13 @@ const EditContactDialog: React.FC<EditContactDialogProps> = ({ contact, handleUp
         setForm((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = () => {
-        handleUpdateContact(form as EditableContact);
+    const handleSubmit = async () => {
+        try {
+            await updateContact.mutateAsync(form as EditableContact);
+        } catch (err: any) {
+            setErrors(JSON.parse(err.message));
+        }
+
         onClose();
     };
 
@@ -54,19 +62,31 @@ const EditContactDialog: React.FC<EditContactDialogProps> = ({ contact, handleUp
                     </Dialog.Description>
 
                     {["firstName", "lastName", "email", "phone", "company", "position"].map((field) =>
-                        <fieldset className={styles.Fieldset} key={"edit-" + field}>
-                            <Text className={styles.Label} htmlFor={field}>
-                                {field.charAt(0).toUpperCase() + field.slice(1)}
-                            </Text>
-                            <TextField.Root
-                                className={styles.Input}
-                                id={field}
-                                name={field}
-                                value={form[field as keyof typeof form]}
-                                onChange={handleChange}
-                                required={true}
-                            />
-                        </fieldset>
+                        <div>
+                            <fieldset className={styles.Fieldset} key={"edit-" + field}>
+                                <Text className={styles.Label} htmlFor={field}>
+                                    {field.charAt(0).toUpperCase() + field.slice(1)}
+                                </Text>
+                                <TextField.Root
+                                    className={styles.Input}
+                                    id={field}
+                                    name={field}
+                                    value={form[field as keyof typeof form]}
+                                    onChange={handleChange}
+                                    required={true}
+                                />
+                            </fieldset>
+
+                            {errors && errors.map((e) => {
+                                if (field === e.path[0]) {
+                                    return (
+                                        <Text color="red">
+                                            {e.message}
+                                        </Text>
+                                    )
+                                }
+                            })}
+                        </div>
                     )}
 
                     <fieldset className={styles.Fieldset}>

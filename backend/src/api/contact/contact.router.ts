@@ -4,23 +4,14 @@ import { z } from "zod";
 
 import { ContactRouterMapper } from "./contact.router.dto";
 import { router, publicProcedure } from "../trpc";
+import { contactCreateSchema, contactUpdateSchema } from "./contact.router.schema";
 
 
 const mapper = new ContactRouterMapper();
 
 export const contactRouter = router({
     createContact: publicProcedure
-        .input(
-            z.object({
-                firstName: z.string(),
-                lastName: z.string(),
-                email: z.string().email(),
-                phone: z.string(),
-                company: z.string(),
-                position: z.string(),
-                status: z.enum(["New", "Contacted", "Qualified", "Lost"]),
-            })
-        )
+        .input(contactCreateSchema)
         .mutation(async ({ input, ctx }) => {
             const contact = mapper.to_entitie(input);
 
@@ -31,18 +22,7 @@ export const contactRouter = router({
         }),
 
     updateContact: publicProcedure
-        .input(
-            z.object({
-                id: z.number(),
-                firstName: z.string(),
-                lastName: z.string(),
-                email: z.string().email(),
-                phone: z.string(),
-                company: z.string(),
-                position: z.string(),
-                status: z.enum(["New", "Contacted", "Qualified", "Lost"]),
-            })
-        )
+        .input(contactUpdateSchema)
         .mutation(async ({ input, ctx }) => {
             const contact = mapper.to_entitie(input);
             contact.id = input.id;

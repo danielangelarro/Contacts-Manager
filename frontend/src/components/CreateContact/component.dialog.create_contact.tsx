@@ -4,13 +4,11 @@ import { Cross2Icon, PlusCircledIcon } from "@radix-ui/react-icons";
 import { Button, Select, Text, TextField } from "@radix-ui/themes";
 import styles from "../../styles/modules/dialog.module.css";
 import { Contact } from "../../entities/contact.entity";
+import { useCreateContact } from "../../hooks/use.contacts";
+import { ValidationError } from "../../utils/trpc.client";
 
 
-interface ContactDialogProps {
-    handleCreateContact: (contact: Contact) => void;
-}
-
-const DialogDemo: React.FC<ContactDialogProps> = ({ handleCreateContact }) => {
+const DialogDemo: React.FC = () => {
     const [form, setForm] = useState<Omit<Contact, 'createdAt' | 'updatedAt'>>({
         firstName: "",
         lastName: "",
@@ -20,14 +18,20 @@ const DialogDemo: React.FC<ContactDialogProps> = ({ handleCreateContact }) => {
         position: "",
         status: "New",
     });
+    const [errors, setErrors] = useState<ValidationError[]>([]);
+    const createContact = useCreateContact();
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setForm((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = () => {
-        handleCreateContact(form);
+    const handleSubmit = async () => {
+        try {
+            await createContact.mutateAsync(form);
+          } catch (err: any) {
+            setErrors(JSON.parse(err.message));
+          }
     };
 
     return (
@@ -45,20 +49,34 @@ const DialogDemo: React.FC<ContactDialogProps> = ({ handleCreateContact }) => {
                         Create your new contact here. Click save when you're done.
                     </Dialog.Description>
 
+
                     {["firstName", "lastName", "email", "phone", "company", "position"].map((field) =>
-                        <fieldset className={styles.Fieldset} key={"create-" + field}>
-                            <Text className={styles.Label} htmlFor={field}>
-                                {field.charAt(0).toUpperCase() + field.slice(1)}
-                            </Text>
-                            <TextField.Root
-                                className={styles.Input}
-                                id={field}
-                                name={field}
-                                value={form[field as keyof typeof form]}
-                                onChange={handleChange}
-                                required={true}
-                            />
-                        </fieldset>
+                        <div>
+                            <fieldset className={styles.Fieldset} key={"create-" + field}>
+                                <Text className={styles.Label} htmlFor={field}>
+                                    {field.charAt(0).toUpperCase() + field.slice(1)}
+                                </Text>
+                                <TextField.Root
+                                    className={styles.Input}
+                                    id={field}
+                                    name={field}
+                                    value={form[field as keyof typeof form]}
+                                    onChange={handleChange}
+                                    required={true}
+                                />
+                            </fieldset>
+                            
+                            {errors && errors.map((e) => {
+                                if (field === e.path[0]) {
+                                    return (
+                                        <Text color="red">
+                                            {e.message}
+                                        </Text>
+                                    )
+                                }
+                            })}
+
+                        </div>
                     )}
 
                     <fieldset className={styles.Fieldset}>
